@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webcam Filters</title>
+    <!-- jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+    <!-- Bootstrap JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.min.js"></script>
+    <!-- Llibreria de p5.js: -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <script src="sketch1.js" defer></script>
+    <link rel="stylesheet" href="estils/style.css">
+
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <!-- Columna de la esquerra -->
+                <div id="lienzo"></div>
+            </div>
+            <div class="col-md-6 columna">
+                <!-- Columna de la dreta -->
+                <div class="instrucciones">
+                    <h1>Benvingut a l'exercici 1 de la PR1</h1>
+                    <h2>Per aplicar filtres a la imatge, hauràs de clicar les lletres amb el teclat.</h2>
+                    <h3>El meu nom complert es:</h3>
+                    <h1 class="display-2">Daniel Larrosa Mujico</h1>
+
+                    <p>Instruccions d'ús:</p>
+                    <ul>
+                        <li>Pressiona la tecla "L" per realitzar una CAPTURA DE PANTALLA i aplicar un filtre negatiu.</li>
+                        <li>Pressiona la tecla "A" per realitzar una POSTERITZACIÓ (Nivell 3) a la imatge.</li>
+                        <li>Pressiona la tecla "R" per realitzar una BINARITZACIÓ (Llindar 120) a la imatge.</li>
+                        <li>Pressiona la tecla "O" per convertir en NEGATIU la imatge.</li>
+                    </ul>
+                    <p>Polsant qualsevol altra tecla, es recupera la webcam en estat normal.</p>
+
+                    <p id="ultima-letra"></p>
+                    <br />
+                    <p>Accedeix a la resta d'exercicis desde aqui:
+                        <a><b>Exercici 1</b></a> /
+                        <a href="index2.html">Exercici 2</a> /
+                        <a href="index3.html">Exercici 3</a> / Exercici 4
+                        <a href="index4a.html">A</a>
+                        <a href="index4b.html">B</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
