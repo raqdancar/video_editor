@@ -4,8 +4,13 @@ let translationY = 0;
 let rotationAngle = 0;
 let scaleValue = 1;
 let rotateContinuously = false;
+let zoomin = false;
+let zoomout = false;
 let moveRight = false;
 let moveLeft = false;
+let moveUp = false; // Variable para el movimiento hacia arriba
+let moveDown = false; // Variable para el movimiento hacia abajo
+
 
 function setup() {
     let canvas = createCanvas(640, 480);
@@ -29,10 +34,22 @@ function draw() {
     } else if (translationX < -width / 2) {
         translationX = width / 2; // Aparece por el lado derecho
     }
+    
+    if (translationY > height / 2) {
+        translationY = -height / 2; // Aparece por la parte superior
+    } else if (translationY < -height / 2) {
+        translationY = height / 2; // Aparece por la parte inferior
+    }
 
     translate(translationX, translationY); // Aplicar la translación
     if (rotateContinuously) {
         rotationAngle += 0.1; // Rotar continuamente en sentido horario si se debe
+    }
+    if (zoomin){
+        scaleValue += 0.1; // Ampliar
+    }
+    if (zoomout){
+        scaleValue -= 0.1; // Reducir
     }
     rotate(rotationAngle); // Aplicar la rotación
     scale(scaleValue); // Aplicar la ampliación/reducción
@@ -53,9 +70,9 @@ function keyPressed() {
     } else if (key.toLowerCase() === "d") {
         rotateContinuously = true; // Activar la rotación continua
     } else if (key === "+") {
-        scaleValue += 0.1; // Ampliar
+        zoomin = true; // Activar movimiento hacia la derecha
     } else if (key === "-") {
-        scaleValue -= 0.1; // Reducir
+        zoomout = true; // Activar movimiento hacia la derecha
     }
 }
 
@@ -67,5 +84,9 @@ function keyReleased() {
         moveRight = false;
     } else if (key.toLowerCase() === "d") {
         rotateContinuously = false; // Desactivar la rotación continua al soltar la tecla "d"
+    } else if (key === "+") {
+        zoomin = false; 
+    } else if (key === "-") {
+        zoomout = false; 
     }
 }

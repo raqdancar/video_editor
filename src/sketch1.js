@@ -1,5 +1,10 @@
 let video;
 let imatgeCapturada;
+let negativeFilter = false;
+let dilateImage = false;
+let posterizeImage = false;
+let binariImage = false;
+let combinedEffects = false;
 
 function setup() {
     let canvas = createCanvas(640, 480);
@@ -12,8 +17,16 @@ function setup() {
 
 function draw() {
     background(255);
-    if (imatgeCapturada) {
-        image(imatgeCapturada, 0, 0, width, height);
+    if (negativeFilter) {
+        image(negativeImage(video), 0, 0, width, height);
+    } else if(dilateImage) {
+        image(applyDilation(video), 0, 0, width, height);
+    } else if(posterizeImage){
+        image(applyPosterize(video), 0, 0, width, height);
+    } else if(binariImage){
+        image(applyBinarization(video), 0, 0, width, height);
+    } else if(combinedEffects){
+        image(applyBothEffects(video), 0, 0, width, height);
     } else {
         image(video, 0, 0, width, height);
     }
@@ -26,24 +39,23 @@ function keyPressed() {
     switch (key.toLowerCase()) {
         case "l":
             // Exercici A)
-            captureAndApplyNegativeFilter();
+            negativeFilter = true;
             break;
         case "a":
             // Exercici B)
-            applyPosterizationFilter(false, 6);
+            posterizeImage = true;
             break;
         case "r":
             // Exercici C)
-            applyBinarizationFilter(110);
+            binariImage = true;
             break;
         case "o":
             // Exercici D)
-            applyDilation();
+            dilateImage = true;
             break;
         case "d":
             // Exercici E)
-            captureAndApplyNegativeFilter();
-            applyPosterizationFilter(true, 6);
+            combinedEffects = true;
             break;
         default:
             // Restaura la vista en vivo cuando se presiona cualquier tecla que no sea 'L', 'A', 'R', 'O' o 'D'
@@ -52,91 +64,43 @@ function keyPressed() {
     }
 }
 
-function screenshoot(){
-    let imatgeCapturada = createImage(width, height);
-    imatgeCapturada.copy(
-        video,
-        0,
-        0,
-        video.width,
-        video.height,
-        0,
-        0,
-        imatgeCapturada.width,
-        imatgeCapturada.height
-    ); 
-    return imatgeCapturada;
+
+function negativeImage(img) {
+    let negativeImage = img.get();
+    negativeImage.filter(INVERT); // Aplica la Inversión negativa a la imagen
+    return negativeImage;
 }
 
-function captureAndApplyNegativeFilter() {
-    // Captura la imagen de la webcam
-    imatgeCapturada = screenshoot();
-
-    // Aplica el filtro negativo a la imagen capturada
-    imatgeCapturada.loadPixels();
-    for (let i = 0; i < imatgeCapturada.pixels.length; i += 4) {
-        imatgeCapturada.pixels[i] = 255 - imatgeCapturada.pixels[i]; // R
-        imatgeCapturada.pixels[i + 1] = 255 - imatgeCapturada.pixels[i + 1]; // G
-        imatgeCapturada.pixels[i + 2] = 255 - imatgeCapturada.pixels[i + 2]; // B
-    }
-    imatgeCapturada.updatePixels();
+function applyDilation(img) {
+    let negativeImage = img.get();
+    negativeImage.filter(DILATE); // Aplica la Inversión negativa a la imagen
+    return negativeImage;
 }
 
-function applyPosterizationFilter(useExistingImage,level) {
-    if (!useExistingImage || !imatgeCapturada) {
-        // Realiza una nueva captura de pantalla solo si se solicita o si no hay una imagen capturada existente
-        imatgeCapturada = screenshoot();
-    }
-    imatgeCapturada.loadPixels();
-    for (let i = 0; i < imatgeCapturada.pixels.length; i += 4) {
-        let r = imatgeCapturada.pixels[i];
-        let g = imatgeCapturada.pixels[i + 1];
-        let b = imatgeCapturada.pixels[i + 2];
-
-        // Aplica la posterización a cada canal de color
-        r = round((r / 255) * level) * floor(255 / level);
-        g = round((g / 255) * level) * floor(255 / level);
-        b = round((b / 255) * level) * floor(255 / level);
-
-        imatgeCapturada.pixels[i] = r;
-        imatgeCapturada.pixels[i + 1] = g;
-        imatgeCapturada.pixels[i + 2] = b;
-    }
-    imatgeCapturada.updatePixels();
+function applyPosterize(img) {
+    let posterizeImage = img.get();
+    posterizeImage.filter(POSTERIZE,6); // Aplica la Inversión negativa a la imagen
+    return posterizeImage;
 }
 
-function applyBinarizationFilter(threshold) {
-    imatgeCapturada = screenshoot();
-    
-    imatgeCapturada.loadPixels();
-    for (let i = 0; i < imatgeCapturada.pixels.length; i += 4) {
-        let r = imatgeCapturada.pixels[i];
-        let g = imatgeCapturada.pixels[i + 1];
-        let b = imatgeCapturada.pixels[i + 2];
-
-        // Calcula el valor promedio de los componentes de color
-        let avg = (r + g + b) / 3;
-
-        // Aplica la binarización según el umbral dado
-        if (avg < threshold) {
-            imatgeCapturada.pixels[i] = 0;
-            imatgeCapturada.pixels[i + 1] = 0;
-            imatgeCapturada.pixels[i + 2] = 0;
-        } else {
-            imatgeCapturada.pixels[i] = 255;
-            imatgeCapturada.pixels[i + 1] = 255;
-            imatgeCapturada.pixels[i + 2] = 255;
-        }
-    }
-    imatgeCapturada.updatePixels();
+function applyBinarization(img) {
+    let binerizedImage = img.get();
+    binerizedImage.filter(THRESHOLD,110 / 255); // Aplica la Inversión negativa a la imagen
+    return binerizedImage;
 }
 
-function applyDilation() {
-    imatgeCapturada = screenshoot();
-    imatgeCapturada.filter(DILATE); // Aplica la dilatación a la imagen
+function applyBothEffects(img) {
+    let image = img.get();
+    image.filter(THRESHOLD,110 / 255); // Aplica la Inversión negativa a la imagen
+    image.filter(INVERT);
+    return image;
 }
-
 
 function restoreLiveView() {
     imatgeCapturada = null;
+    negativeFilter = false;
+    dilateImage = false;
+    posterizeImage = false;
+    binariImage= false;
+    combinedEffects= false;
 }
