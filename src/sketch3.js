@@ -1,9 +1,12 @@
+//Creació de variables necessaries per controlar el programa:
 let video;
 let translationX = 0;
 let translationY = 0;
 let rotationAngle = 0;
 let scaleValue = 1;
+//Variable per rotar l'imatge.
 let rotateContinuously = false;
+//Variables de zoom, moviment lateral i superior/inferior.
 let zoomin = false;
 let zoomout = false;
 let moveRight = false;
@@ -11,7 +14,7 @@ let moveLeft = false;
 let moveUp = false; // Variable para el movimiento hacia arriba
 let moveDown = false; // Variable para el movimiento hacia abajo
 
-
+//Funció SETUP que prepara el background per que el programa funcioni
 function setup() {
     let canvas = createCanvas(640, 480);
     canvas.parent("lienzo");
@@ -21,69 +24,69 @@ function setup() {
     video.hide();
 }
 
-function draw() {
+function draw() { //Funció que dibuixa al canva constantment. S'executa en bucle.
     background(255);
     
-    // Aplicar transformaciones geométricas
-    translate(width / 2, height / 2); // Centrar la transformación en el centro del lienzo
-    translationX += (moveRight ? 10 : 0) - (moveLeft ? 10 : 0); // Desplazamiento continuo
+    //Apliquem transformacions geometriques
+    translate(width / 2, height / 2); // Escollim el centre del canva com a origen de totes les nostres transformacions.
+    translationX += (moveRight ? 10 : 0) - (moveLeft ? 10 : 0); // Comprovem si el desplaçament continu está en marxa.
 
-    // Verificar si la imagen de la cámara se ha movido más allá de los límites del lienzo
+    // Verifiquem si la imatge esta dins dels limits del nostre espai canva.
     if (translationX > width / 2) {
-        translationX = -width / 2; // Aparece por el lado izquierdo
+        translationX = -width / 2; // Fem que la imatge aparegui pel costat esquerra.
     } else if (translationX < -width / 2) {
-        translationX = width / 2; // Aparece por el lado derecho
+        translationX = width / 2;  // Fem que la imatge aparegui pel costat dret.
     }
     
     if (translationY > height / 2) {
-        translationY = -height / 2; // Aparece por la parte superior
+        translationY = -height / 2;  // Fem que la imatge aparegui per la part superior.
     } else if (translationY < -height / 2) {
-        translationY = height / 2; // Aparece por la parte inferior
+        translationY = height / 2;  // Fem que la imatge aparegui per la part inferior.
     }
 
-    translate(translationX, translationY); // Aplicar la translación
+    translate(translationX, translationY); // Apliquem la translació
     if (rotateContinuously) {
-        rotationAngle += 0.1; // Rotar continuamente en sentido horario si se debe
+        rotationAngle += 0.1; // Girem la imatge en sentit horari indefinidament.
     }
     if (zoomin){
-        scaleValue += 0.1; // Ampliar
+        scaleValue += 0.1; // Ampliem imatge si es boolean true
     }
     if (zoomout){
-        scaleValue -= 0.1; // Reducir
+        scaleValue -= 0.1; // Redu:im la imatge si es boolean false.
     }
-    rotate(rotationAngle); // Aplicar la rotación
-    scale(scaleValue); // Aplicar la ampliación/reducción
+    rotate(rotationAngle); // Apliquem rotació
+    scale(scaleValue); // Apliquem ampliació/reducció
 
-    // Mostrar la captura de la webcam
+    // Mostrem la captura de la nostre webcam
     image(video, -width / 2, -height / 2, width, height);
 }
 
-function keyPressed() {
+function keyPressed() { //Funció que s'executa cada cop que es detecta una tecla polsada al teclat.
     if (keyCode === UP_ARROW) {
-        translationY -= 10; // Desplazar hacia arriba
+        translationY -= 10; // Desplaçament superior
     } else if (keyCode === DOWN_ARROW) {
-        translationY += 10; // Desplazar hacia abajo
+        translationY += 10; //  Desplaçament Inferior
     } else if (keyCode === LEFT_ARROW) {
-        moveLeft = true; // Activar movimiento hacia la izquierda
+        moveLeft = true; // Moviment a l'esquerra
     } else if (keyCode === RIGHT_ARROW) {
-        moveRight = true; // Activar movimiento hacia la derecha
+        moveRight = true; // Moviment a la dreta
     } else if (key.toLowerCase() === "d") {
-        rotateContinuously = true; // Activar la rotación continua
+        rotateContinuously = true; // Rotació continua
     } else if (key === "+") {
-        zoomin = true; // Activar movimiento hacia la derecha
+        zoomin = true; // Activar ampliació
     } else if (key === "-") {
-        zoomout = true; // Activar movimiento hacia la derecha
+        zoomout = true; // Activar reducció
     }
 }
 
 function keyReleased() {
-    // Detener la translación al soltar las teclas de flechas
+    //Funció que s'executa cada cop que es detecta que una tecla s'ha deixat de premer al teclat.
     if (keyCode === LEFT_ARROW) {
         moveLeft = false;
     } else if (keyCode === RIGHT_ARROW) {
         moveRight = false;
     } else if (key.toLowerCase() === "d") {
-        rotateContinuously = false; // Desactivar la rotación continua al soltar la tecla "d"
+        rotateContinuously = false;
     } else if (key === "+") {
         zoomin = false; 
     } else if (key === "-") {
